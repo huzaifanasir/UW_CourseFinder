@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-#import requests
-#import json 
-#from uwaterlooapi import UWaterlooAPI
 import requests
 import json
 import urllib2
@@ -25,11 +21,18 @@ while len(term) != 4:
         print("Error: please enter a valid school term")
 
 course = raw_input("Please enter the course code for the class you're looking for (e.g., ECON 101)\n")
-subj,catalog_num = course.split(" ")
+#no space in between
+if course.find(" ") == -1:
+    catalog_num = course[::-1]
+    catalog_num = catalog_num[0:3]
+    catalog_num = catalog_num[::-1]
+    subj = course.replace(catalog_num, "")
+#space
+else:
+    subj,catalog_num = course.split(" ")
 
 
-uw_url = uw_call + "terms/" + term + "/" + subj + "/" + catalog_num + "/schedule.json?key=" +uw_key
-
+uw_url = uw_call + "terms/" + term + "/" + subj + "/" + catalog_num + "/schedule.json?key=" + uw_key
 json_obj = urllib2.urlopen(uw_url)
 course_data = json.load(json_obj)
 
@@ -37,10 +40,20 @@ course_data = json.load(json_obj)
 print("For " + subj.upper() + " " + catalog_num + ":")
 
 
+total_spots = 0
 for item in course_data["data"]:
-    if item["enrollment_capacity"] > item["enrollment_total"]:
+    x = item["classes"]
+    y = x[0]
+    
+    if (item["section"])[0:3] == "LEC" and item["enrollment_capacity"] > item["enrollment_total"]:
         spots = item["enrollment_capacity"] - item["enrollment_total"]
-        print(item["section"] + " has " + str(spots) + " spots open.")
+        sec = item["classes"]
+        print(item["section"] + " has " + str(spots) + " slots available.")
+        total_spots += spots
+    
+if total_spots < 1:
+    print("There are no available slots.")
+
     
   
 
