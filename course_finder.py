@@ -44,11 +44,15 @@ total_spots = 0
 for item in course_data["data"]:
     x = item["classes"]
     y = x[0]
+   # print(y["instructors"])
+
     
     if (item["section"])[0:3] == "LEC" and item["enrollment_capacity"] > item["enrollment_total"]:
         spots = item["enrollment_capacity"] - item["enrollment_total"]
         sec = item["classes"]
-        print(item["section"] + " has " + str(spots) + " slots available.")
+        statement = item["section"] + " has " + str(spots) + " slots available. It is taught by "
+        for prof in y["instructors"]:
+            print(statement + prof + ".")
         total_spots += spots
     
 if total_spots < 1:
