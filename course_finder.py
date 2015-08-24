@@ -24,7 +24,7 @@ while (leave != "x"):
             term += "9"
         elif month.lower() == "w":
             term += "1"
-        elif month.lower():
+        elif month.lower() == "s":
             term += "5"
         else:
             print("Error: please enter a valid school term")
