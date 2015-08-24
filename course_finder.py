@@ -20,20 +20,21 @@ while (leave != "x"):
         school_term = raw_input("Which school term would you like course information for? (e.g., Winter 2014, Fall 2015)\n")
         term += school_term[-2:]
         month = school_term[0:1]
-        if month == "f" or month == "F":
+        if month.lower() == "f":
             term += "9"
-        elif month == "w" or month == "W":
+        elif month.lower() == "w":
             term += "1"
-        elif month == "s" or month == "S":
+        elif month.lower():
             term += "5"
         else:
             print("Error: please enter a valid school term")
 
     course = raw_input("Please enter the course code for the class you're looking for (e.g., ECON 101)\n")
-    
+
+#splitting the subject and the catalog number
 #no space in between
     if course.find(" ") == -1:
-        catalog_num = course[::-1]
+        catalog_num = course[::-1] 
         catalog_num = catalog_num[0:3]
         catalog_num = catalog_num[::-1]
         subj = course.replace(catalog_num, "")
@@ -54,7 +55,6 @@ while (leave != "x"):
     for item in course_data["data"]:
         x = item["classes"]
         y = x[0]
-
         
         if (item["section"])[0:3] == "LEC" and item["enrollment_capacity"] > item["enrollment_total"]:
             spots = item["enrollment_capacity"] - item["enrollment_total"]
